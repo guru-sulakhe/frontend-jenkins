@@ -51,17 +51,17 @@ pipeline {
                 }
             }
         }
-        // stage('Deploy'){ //transfering build job backend to backend-deploy and passing appVersion as input to the backend-deploy(pipeline)
-        //     steps {
-        //         script {
-        //             def params = [
-        //             string(name: 'appVersion', value: "${appVersion}")
-        //         ]
-        //             build job: 'frontend-deploy', parameters: params, wait: false  // when we include wait:false upstream job won't wait for downstream job
+        stage('Deploy'){ //transfering build job backend to backend-deploy and passing appVersion as input to the backend-deploy(pipeline)
+            steps {
+                script {
+                    def params = [
+                    string(name: 'appVersion', value: "${appVersion}")
+                ]
+                    build job: 'frontend-deploy', parameters: params, wait: false  // when we include wait:false upstream job won't wait for downstream job
                      
-        //         }
-        //     }
-        // }
+                }
+            }
+        }
     }
         post { 
         always { 
