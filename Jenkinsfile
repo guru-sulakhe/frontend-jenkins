@@ -42,6 +42,17 @@ pipeline {
 
             }
         }
+        stage('Deploy'){ //deploying the application by implementing helm kubernetes and deploying it in k8-cluster
+            steps { //after the first installment of helm, mention helm upgrade backend . in the pipeline 
+                sh """
+                    aws eks update-kubeconfig --region us-east-1 --name expense-dev
+                    cd helm
+                    sed -i 's/IMAGE_VERSION/${appVersion}/g' values.yaml 
+                    helm install backend .
+                """
+
+            }
+        }
         // stage('Nexus Artifact Uploader'){ // uploading the backend zip to the nexus repository(backend)
         //     steps {
         //         script {
@@ -64,18 +75,18 @@ pipeline {
         //         }
         //     }
         // }
-        stage('Deploy'){ //transfering build job backend to backend-deploy and passing appVersion as input to the backend-deploy(pipeline)
-            steps {
-                script {
-                    def params = [
-                    string(name: 'appVersion', value: "${appVersion}")
-                ]
-                    build job: 'frontend-deploy', parameters: params, wait: false  // when we include wait:false upstream job won't wait for downstream job
+    //     stage('Deploy'){ //transfering build job backend to backend-deploy and passing appVersion as input to the backend-deploy(pipeline)
+    //         steps {
+    //             script {
+    //                 def params = [
+    //                 string(name: 'appVersion', value: "${appVersion}")
+    //             ]
+    //                 build job: 'frontend-deploy', parameters: params, wait: false  // when we include wait:false upstream job won't wait for downstream job
                      
-                }
-            }
-        }
-    }
+    //             }
+    //         }
+    //     }
+    // }
         post { 
         always { 
             echo 'I will always say Hello again!'
