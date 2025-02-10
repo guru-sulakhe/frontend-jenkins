@@ -55,6 +55,7 @@ pipeline {
 
             }
         }
+    }
         // stage('Nexus Artifact Uploader'){ // uploading the backend zip to the nexus repository(backend)
         //     steps {
         //         script {
@@ -76,7 +77,7 @@ pipeline {
 
         //         }
         //     }
-        // }
+        //  }
     //     stage('Deploy'){ //transfering build job backend to backend-deploy and passing appVersion as input to the backend-deploy(pipeline)
     //         steps {
     //             script {
@@ -88,7 +89,7 @@ pipeline {
     //             }
     //         }
     //     }
-    // }
+    //  }
         post { 
         always { 
             echo 'I will always say Hello again!'
