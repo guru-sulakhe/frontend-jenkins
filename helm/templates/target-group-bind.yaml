@@ -1,4 +1,4 @@
-#TargetGroupBinding is a custom resource (CR) that can expose your pods using an existing ALB TargetGroup or NLB TargetGroup.
+#TargetGroupBinding is a custom resource (CR) that can register pods using an existing ALB TargetGroup or NLB TargetGroup.
 apiVersion: elbv2.k8s.aws/v1beta1
 kind: TargetGroupBinding
 metadata:
