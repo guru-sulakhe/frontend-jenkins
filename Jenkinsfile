@@ -29,28 +29,41 @@ pipeline {
                 """
             }
         }
-        stage('Nexus Artifact Uploader'){ // uploading the backend zip to the nexus repository(backend)
+        stage('Docker Build'){ //login to ecr and pushing images into ecr which helps in storing docker images
             steps {
-                script {
-                    nexusArtifactUploader(
-                        nexusVersion: 'nexus3',
-                        protocol: 'http',
-                        nexusUrl: "${nexusUrl}",
-                        groupId: 'com.expense',
-                        version: "${appVersion}",
-                        repository: "frontend",
-                        credentialsId: 'nexus-auth',
-                        artifacts: [
-                            [artifactId: "frontend",
-                            classifier: '',
-                            file: "frontend-" + "${appVersion}" + '.zip',
-                            type: 'zip']
-                        ]
-                     )
+                sh """
+                    aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${account_id}.dkr.ecr.${region}.amazonaws.com
 
-                }
+                    docker build -t ${account_id}.dkr.ecr.${region}.amazonaws.com/expense-backend:${appVersion} .
+
+                    docker push ${account_id}.dkr.ecr.${region}.amazonaws.com/expense-backend:${appVersion}
+
+                """
+
             }
         }
+        // stage('Nexus Artifact Uploader'){ // uploading the backend zip to the nexus repository(backend)
+        //     steps {
+        //         script {
+        //             nexusArtifactUploader(
+        //                 nexusVersion: 'nexus3',
+        //                 protocol: 'http',
+        //                 nexusUrl: "${nexusUrl}",
+        //                 groupId: 'com.expense',
+        //                 version: "${appVersion}",
+        //                 repository: "frontend",
+        //                 credentialsId: 'nexus-auth',
+        //                 artifacts: [
+        //                     [artifactId: "frontend",
+        //                     classifier: '',
+        //                     file: "frontend-" + "${appVersion}" + '.zip',
+        //                     type: 'zip']
+        //                 ]
+        //              )
+
+        //         }
+        //     }
+        // }
         stage('Deploy'){ //transfering build job backend to backend-deploy and passing appVersion as input to the backend-deploy(pipeline)
             steps {
                 script {
