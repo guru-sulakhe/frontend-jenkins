@@ -2,4 +2,4 @@ configmap:
   listen-port: 8080
 deployment:
   replicas: 2
-  imageVersion: IMAGE_VERSION
+  imageVersion: IMAGE_VERSION # this is a place-holder at which IMAGE_VERSION will be changed during the frontend-jenkins CICD pipeline
