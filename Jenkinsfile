@@ -34,21 +34,21 @@ pipeline {
                 sh """
                     aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${account_id}.dkr.ecr.${region}.amazonaws.com
 
-                    docker build -t ${account_id}.dkr.ecr.${region}.amazonaws.com/expense-backend:${appVersion} .
+                    docker build -t ${account_id}.dkr.ecr.${region}.amazonaws.com/expense-frontend:${appVersion} .
 
-                    docker push ${account_id}.dkr.ecr.${region}.amazonaws.com/expense-backend:${appVersion}
+                    docker push ${account_id}.dkr.ecr.${region}.amazonaws.com/expense-frontend:${appVersion}
 
                 """
 
             }
         }
         stage('Deploy'){ //deploying the application by implementing helm kubernetes and deploying it in k8-cluster
-            steps { //after the first installment of helm, mention helm upgrade backend . in the pipeline 
+            steps { //after the first installment of helm, mention helm upgrade frontend . in the pipeline 
                 sh """
                     aws eks update-kubeconfig --region us-east-1 --name expense-dev
                     cd helm
                     sed -i 's/IMAGE_VERSION/${appVersion}/g' values.yaml 
-                    helm install backend .
+                    helm install frontend .
                 """
 
             }
