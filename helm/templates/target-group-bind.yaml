@@ -1,0 +1,11 @@
+#TargetGroupBinding is a custom resource (CR) that can expose your pods using an existing ALB TargetGroup or NLB TargetGroup.
+apiVersion: elbv2.k8s.aws/v1beta1
+kind: TargetGroupBinding
+metadata:
+  name: frontend
+  namespace: expense
+spec:
+  serviceRef:
+    name: frontend #your frontend-server name
+    port: 80
+  targetGroupARN: <arn-to-targetGroup> #your target-group ARN
