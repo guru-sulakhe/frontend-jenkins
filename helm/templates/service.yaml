@@ -1,0 +1,18 @@
+#for connection mysql and backend pods we need to ensure to include a service, which will helps in communication between pods i.,e LoadBalancer
+# This service helps in configuring in R53 records
+apiVersion: v1
+kind: Service
+metadata: 
+  name: frontend
+  #attaching to expense namespace
+  namespace: expense
+spec: 
+  type: LoadBalancer
+  selectors:
+    project: expense
+    component: frontend
+    tier: web
+  ports:
+  - protocol: TCP
+    port: 80 #servicer port
+    targetPort: 8080
